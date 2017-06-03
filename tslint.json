@@ -5,6 +5,7 @@
   "rules": {
     "no-import-side-effect": true,
     "no-internal-module": true,
+    // "no-magic-numbers": true,
     "no-non-null-assertion": true,
     "no-reference": true,
     "no-var-requires": true,
@@ -15,7 +16,12 @@
       "call-signature",
       "arrow-call-signature",
       "parameter",
+      // "arrow-parameter",
       "property-declaration"
+      //"variable-declaration"
+      // "member-variable-declaration",
+      // "object-destructuring",
+      // "array-destructuring"
     ],
     "typedef-whitespace": [
       true,
@@ -35,7 +41,9 @@
       }
     ],
     "unified-signatures": true,
+    // Functionality
     "await-promise": true,
+    // "curly": true,
     "forin": true,
     "label-position": true,
     "no-arg": true,
@@ -57,7 +65,6 @@
     "no-switch-case-fall-through": true,
     "no-unbound-method": true,
     "no-unsafe-any": true,
-    "no-any" : true,
     "no-unsafe-finally": true,
     "no-unused-expression": [
       true,
@@ -75,20 +82,42 @@
     "strict-boolean-expressions": true,
     "strict-type-predicates": true,
     "switch-default": true,
+    // "triple-equals": [
+    //   true,
+    //   "allow-null-check",
+    //   "allow-undefined-check"
+    // ],
     "typeof-compare": true,
     "use-isnan": true,
+    // Maintainability
     "cyclomatic-complexity": true,
+    // "eofline": true,
     "indent": [
       true,
       "spaces"
     ],
+    //    "linebreak-style": [
+    //      true,
+    //      "CRLF"
+    //    ],
+    // "max-classes-per-file": [
+    //   true,
+    //   1
+    // ],
+    // "no-default-export": true,
     "no-mergeable-namespace": true,
+    // "no-require-imports": true, // useful, but in react-native "require" use for include resources
+    // "prefer-const": true,
     "array-type": [
       true,
       "array"
     ],
+    // "arrow-parens": [true, "ban-single-arg-parens"],
+    // "arrow-return-shorthand": [true, "multiline"],
+    // "callable-types": true,
     "class-name": true,
     "import-spacing": true,
+    // "interface-name": [true, "always-prefix"],
     "interface-over-type-literal": true,
     "match-default-export-name": true,
     "newline-before-return": true,
@@ -102,16 +131,20 @@
     "no-trailing-whitespace": true,
     "no-unnecessary-initializer": true,
     "no-unnecessary-qualifier": true,
+    // "object-literal-key-quotes": [true, "as-needed"],
     "one-line": [
       true,
       "check-catch",
       "check-finally",
+      // "check-else",
       "check-open-brace",
       "check-whitespace"
     ],
     "one-variable-per-declaration": true,
+    //"prefer-method-signature": true,
     "quotemark": [
       true,
+      // "double",
       "jsx-double"
     ],
     "semicolon": [
@@ -120,7 +153,7 @@
     ],
     "space-before-function-paren": [
       true,
-      { "named" : "always"}
+      "named"
     ],
     "variable-name": [
       true,
