@@ -1,0 +1,44 @@
+{
+  "name": "Layout",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "ts": "tsc -p .",
+    "tsw": "npm run ts -- --watch",
+    "start": "node node_modules/react-native/local-cli/cli.js start",
+    "android:start": "node node_modules/react-native/local-cli/cli.js run-android",
+    "ios:start": "node node_modules/react-native/local-cli/cli.js run-ios",
+    "android": "npm run ts && npm run android:start && npm run tsw",
+    "ios": "npm run ts && ios:start && npm run tsw",
+    "log-ios": "node node_modules/react-native/local-cli/cli.js log-ios",
+    "open-ios": "open ios/*.xcodeproj",
+    "test": "jest",
+    "clean": "(cd android/ && gradlew clean)",
+    "build": "(cd android/ && gradlew assembleDebug)",
+    "build-release-apk": "(cd android/ && gradlew assembleRelease)",
+    "prebundle-android": "npm run ts",
+    "prebundle-ios": "npm run ts",
+    "bundle-android": "node node_modules/react-native/local-cli/cli.js bundle --platform android --entry-file index.android.js --bundle-output android/app/src/main/assets/index.android.bundle --sourcemap-output android/app/src/main/assets/index.android.map --assets-dest android/app/src/main/res/ --dev false --sourcemap-sources-root=build",
+    "bundle-ios": "node node_modules/react-native/local-cli/cli.js bundle --platform ios --entry-file index.ios.js --bundle-output tmp/index.ios.bundle --sourcemap-output tmp/index.ios.map --assets-dest tmp/res --dev false --sourcemap-sources-root=build",
+    "prepare-debug-apk": "npm run bundle-android & npm run build",
+    "lint-ts": "tslint --formatters-dir node_modules/tslint-teamcity-reporter/ --format TSHintTeamcity \"src/**/*.ts\"",
+    "remotedev": "npm run remotedev-revert && remotedev-debugger --injectserver --injectdebugger false --hostname localhost --port 8000",
+    "remotedev-revert": "remotedev-debugger --revert",
+    "shake-android": "adb shell input keyevent 82"
+  },
+  "dependencies": {
+    "react": "16.0.0-alpha.6",
+    "react-native": "0.44.2",
+    "tslint": "^5.4.2",
+    "typescript": "^2.3.4"
+  },
+  "devDependencies": {
+    "babel-jest": "20.0.3",
+    "babel-preset-react-native": "1.9.2",
+    "jest": "20.0.4",
+    "react-test-renderer": "16.0.0-alpha.6"
+  },
+  "jest": {
+    "preset": "react-native"
+  }
+}
