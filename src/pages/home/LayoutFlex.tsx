@@ -1,37 +1,37 @@
 import React from "react";
-import {View, Text, Slider, Switch, Picker} from "react-native";
+import {View, Slider, Switch, Picker} from "react-native";
 
 interface IPropsLayoutFlex {
 }
 
 interface IStateLayoutFlex {
     selected: number;
-    currentPage: Page;
-}
-
-interface IPage {
-    SliderValue: number;
     SwitchIsOn: boolean;
+    currentCell: Cells;
 }
 
-type Page = IPage;
+interface ICells {
+    SliderValue: number;
+}
+
+type Cells = ICells;
 
 export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFlex> {
-    Pages: Page[];
+    Cells: Cells[];
     constructor(props: IPropsLayoutFlex) {
         super(props);
-        this.Pages = [];
-        this.initPages();
+        this.Cells = [];
+        this.initCells();
         this.state = {
             selected: 0,
-            currentPage: this.Pages[0]
+            SwitchIsOn: true,
+            currentCell: this.Cells[0]
         };
     }
-
-    initPages(): void {
-        this.Pages.push({SliderValue: 1, SwitchIsOn: true});
-        this.Pages.push({SliderValue: 3, SwitchIsOn: false});
-        this.Pages.push({SliderValue: 5, SwitchIsOn: true});
+    initCells(): void {
+        this.Cells.push({SliderValue: 1});
+        this.Cells.push({SliderValue: 1});
+        this.Cells.push({SliderValue: 1});
     }
 
     turnDirection(SwitchIsOn: boolean): {} {
@@ -41,25 +41,17 @@ export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFl
     }
 
     ChangeSliderValue(value: number): void {
-       this.state.currentPage.SliderValue = value;
-       this.setState({selected: this.state.selected, currentPage: this.state.currentPage});
-    }
-
-    ChangeSwitcherValue(value: boolean): void {
-        this.state.currentPage.SwitchIsOn = value;
-        this.setState({selected: this.state.selected, currentPage: this.state.currentPage});
+       this.state.currentCell.SliderValue = value;
+       this.setState({currentCell: this.state.currentCell});
     }
 
     ChangeFlexGrow(cell: number): number {
-        if (cell == this.state.selected) {
-            return this.state.currentPage.SliderValue;
-        }
-
-        return 1;
+        return this.Cells[cell].SliderValue;
     }
-    inPickerOnChangeValue = (value: number): void => {this.setState({selected: value, currentPage: this.Pages[value]}); };
+
+    inPickerOnChangeValue = (value: number): void => {this.setState({selected: value, currentCell: this.Cells[value]}); };
     inSliderOnChangeValue = (value: number): void => { this.ChangeSliderValue(value); };
-    inSwitchOnChangeValue = (value: boolean): void => {this.ChangeSwitcherValue(value); };
+    inSwitchOnChangeValue = (value: boolean): void => {this.setState({SwitchIsOn: value}); };
     render(): JSX.Element {
         return (
             <View style={{flexGrow: 1}}>
@@ -71,20 +63,17 @@ export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFl
                         <Picker.Item label="Cell 2" value="1"/>
                         <Picker.Item label="Cell 3" value="2"/>
                     </Picker>
-                    <Text>{this.state.selected}</Text>
                     <Slider
                         {...this.props}
-                        value = {this.state.currentPage.SliderValue}
+                        value = {this.state.currentCell.SliderValue}
                         minimumValue={1}
-                        maximumValue={7}
+                        maximumValue={10}
                         onValueChange={this.inSliderOnChangeValue}/>
                     <Switch
                         onValueChange={this.inSwitchOnChangeValue}
-                        value = {this.state.currentPage.SwitchIsOn}
+                        value = {this.state.SwitchIsOn}
                         />
-                    <Text>{this.state.currentPage.SliderValue}</Text>
-
-                    <View style={this.turnDirection(this.state.currentPage.SwitchIsOn)}>
+                    <View style={this.turnDirection(this.state.SwitchIsOn)}>
                         <View style={{flexGrow: this.ChangeFlexGrow(0), backgroundColor: 'red'}}/>
                         <View style={{flexGrow: this.ChangeFlexGrow(1), backgroundColor: 'green'}}/>
                         <View style={{flexGrow: this.ChangeFlexGrow(2), backgroundColor: 'blue'}}/>

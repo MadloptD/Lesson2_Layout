@@ -274,7 +274,7 @@ tasks.xml
 
 # Xcode
 #
-build/
+
 *.pbxuser
 !default.pbxuser
 *.mode1v3
@@ -329,7 +329,7 @@ fabric.properties
 
 # node.js
 #
-node_modules/
+
 **/npm-debug.log
 **/yarn-error.log
 
