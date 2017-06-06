@@ -1,61 +1,59 @@
 import React from "react";
-import {View, Slider, Switch, Picker, Animated, Text, ViewStyle, StyleSheet} from "react-native";
+import {View, Slider, Switch, Picker, Animated, Text, ViewStyle} from "react-native";
 
 interface IPropsLayoutFlex {
 }
 
 interface IStateLayoutFlex {
     selectedCell: number;
-    SwitchIsOn: boolean;
-    currentCell: Cells;
+    switchIsOn: boolean;
+    currentCell: ICells;
 }
 
 interface ICells {
-    SliderValue: number;
+    sliderValue: number;
     animValue: Animated.Value;
 }
 
-type Cells = ICells;
-
 export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFlex> {
 
-    Cells: Cells[];
+    cells: ICells[];
 
     constructor(props: IPropsLayoutFlex) {
         super(props);
-        this.Cells = [];
+        this.cells = [];
         this.initCells();
         this.state = {
             selectedCell: 0,
-            SwitchIsOn: true,
-            currentCell: this.Cells[0]
+            switchIsOn: true,
+            currentCell: this.cells[0]
         };
     }
 
     initCells(): void {
         for (let i: number = 0; i < 3; i++) {
-            this.Cells.push({SliderValue: 1, animValue: new Animated.Value(1)});
+            this.cells.push({sliderValue: 1, animValue: new Animated.Value(1)});
         }
     }
 
-    turnDirection(SwitchIsOn: boolean): {} {
+    turnDirection(SwitchIsOn: boolean): ViewStyle {
         if (SwitchIsOn) {
-            return {flexDirection: "row", height: 100, padding: 10};
+            return styles.horizontalCells;
         }
 
-        return {flex: 1, flexDirection: "column", width: 100, padding: 10};
+        return styles.verticalCells;
     }
 
     inPickerOnChangeValue = (value: number): void => {
-        this.setState({selectedCell: value, currentCell: this.Cells[value]});
+        this.setState({selectedCell: value, currentCell: this.cells[value]});
     }
 
     inSliderOnChangeValue = (value: number): void => {
-        this.state.currentCell.SliderValue = value;
+        this.state.currentCell.sliderValue = value;
         Animated.timing(
             this.state.currentCell.animValue,
             {
-                toValue: this.state.currentCell.SliderValue,
+                toValue: this.state.currentCell.sliderValue,
                 duration: 2000,
             },
         ).start();
@@ -63,13 +61,13 @@ export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFl
     }
 
     inSwitchOnChangeValue = (value: boolean): void => {
-        this.setState({SwitchIsOn: value});
+        this.setState({switchIsOn: value});
     }
 
     render(): JSX.Element {
         return (
-            <View style={{flex: 1}}>
-                <View style={{flexDirection: "column", flex: 1}}>
+            <View style={styles.main}>
+                <View style={styles.mainWrap}>
                     <Picker
                         selectedValue={this.state.selectedCell}
                         onValueChange={this.inPickerOnChangeValue}>
@@ -77,27 +75,27 @@ export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFl
                         <Picker.Item label="Cell 2" value="1"/>
                         <Picker.Item label="Cell 3" value="2"/>
                     </Picker>
-                    <View style={{flexDirection: "row"}}>
-                        <Text style={{flex: 20}}> Grow size </Text>
-                    <Slider style={{flex: 80}}
-                        {...this.props}
-                        value={this.state.currentCell.SliderValue}
-                        minimumValue={1}
-                        maximumValue={10}
-                        onValueChange={this.inSliderOnChangeValue}/>
+                    <View style={styles.sliderBox}>
+                        <Text style={styles.sliderBoxText}> Grow size </Text>
+                        <Slider style={styles.sliderBoxSlider}
+                            {...this.props}
+                            value={this.state.currentCell.sliderValue}
+                            minimumValue={1}
+                            maximumValue={10}
+                            onValueChange={this.inSliderOnChangeValue}/>
                     </View>
-                    <View style={{flexDirection: "row", justifyContent: "space-between"}}>
+                    <View style={styles.wrapSlider}>
                         <Text> Column Mode </Text>
                         <Switch
                         onValueChange={this.inSwitchOnChangeValue}
-                        value={this.state.SwitchIsOn}
+                        value={this.state.switchIsOn}
                         />
                     </View>
-                    <View style={{flex: 1, backgroundColor: "#C6C6C6"}}>
-                    <View style={this.turnDirection(this.state.SwitchIsOn)}>
-                        <Animated.View style={{flexGrow: this.Cells[0].animValue, opacity: this.Cells[0].animValue, backgroundColor: '#c1d4f1'}}/>
-                        <Animated.View style={{flexGrow: this.Cells[1].animValue, opacity: this.Cells[1].animValue, backgroundColor: '#E2DDEB'}}/>
-                        <Animated.View style={{flexGrow: this.Cells[2].animValue, opacity: this.Cells[2].animValue, backgroundColor: '#D3F0D2'}}/>
+                    <View style={styles.wrapCells}>
+                    <View style={this.turnDirection(this.state.switchIsOn)}>
+                        <Animated.View style={{flexGrow: this.cells[0].animValue, backgroundColor: '#c1d4f1'}}/>
+                        <Animated.View style={{flexGrow: this.cells[1].animValue, backgroundColor: '#E2DDEB'}}/>
+                        <Animated.View style={{flexGrow: this.cells[2].animValue, backgroundColor: '#D3F0D2'}}/>
                     </View>
                     </View>
                 </View>
@@ -105,3 +103,41 @@ export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFl
         );
     }
 }
+
+const styles = {
+    main: {
+        flex: 1
+    } as ViewStyle,
+    mainWrap: {
+        flexDirection: "column",
+        flex: 1
+    } as ViewStyle,
+    wrapSlider: {
+        flexDirection: "row",
+        justifyContent: "space-between"
+    } as ViewStyle,
+    wrapCells: {
+        flex: 1,
+        backgroundColor: "#C6C6C6"
+    } as ViewStyle,
+    sliderBoxSlider: {
+        flex: 80
+    } as ViewStyle,
+    sliderBoxText: {
+        flex: 20
+    } as ViewStyle,
+    sliderBox: {
+        flexDirection: "row"
+    } as ViewStyle,
+    horizontalCells: {
+        flexDirection: "row",
+        height: 100,
+        padding: 10
+    } as ViewStyle,
+    verticalCells: {
+        flex: 1,
+        flexDirection: "column",
+        width: 100,
+        padding: 10
+    } as ViewStyle,
+};
