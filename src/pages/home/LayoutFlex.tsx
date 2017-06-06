@@ -1,7 +1,15 @@
 import React from "react";
-import {View, Slider, Switch, Picker} from "react-native";
+import {View, Slider, Switch, Picker, Animated, Text} from "react-native";
 
 interface IPropsLayoutFlex {
+}
+
+interface ITestProps {
+}
+
+interface ITestState {
+    animValue3: Animated.Value;
+    SliderValue: number;
 }
 
 interface IStateLayoutFlex {
@@ -12,12 +20,60 @@ interface IStateLayoutFlex {
 
 interface ICells {
     SliderValue: number;
+    animValue: Animated.Value;
 }
 
 type Cells = ICells;
 
+export class TestFlex extends React.Component<ITestProps, ITestState> {
+    animValue2: Animated.Value = new Animated.Value(1);
+    constructor(props: ITestProps) {
+        super(props);
+        this.state = {
+            animValue3: new Animated.Value(1),
+            SliderValue: 1
+        };
+    }
+
+
+
+    inSliderOnChangeValue = (value: number): void => {
+        this.setState({SliderValue: value });
+        Animated.timing(       // Uses easing functions
+            this.animValue2, // The value to drive
+            {
+
+                toValue: this.state.SliderValue,        // Target
+                duration: 2000,    // Configuration
+            },
+        ).start();
+    }
+
+    render(): JSX.Element {
+        return (
+            <View style={{flex: 1}}>
+                <Slider
+                    {...this.props}
+                    minimumValue={1}
+                    maximumValue={10}
+                    onValueChange = {this.inSliderOnChangeValue}
+                    />
+                <Text>{this.state.SliderValue}</Text>
+            <View style={{flexGrow: 1}}>
+                <Animated.View style={{flexGrow: this.animValue2, opacity: this.animValue2, backgroundColor: 'red'}}/>
+                <Animated.View style={{flexGrow: 1, backgroundColor: 'green'}}/>
+                <Animated.View style={{flexGrow: 1, backgroundColor: 'blue'}}/>
+            </View>
+            </View>
+        );
+    }
+
+}
+
+
 export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFlex> {
     Cells: Cells[];
+
     constructor(props: IPropsLayoutFlex) {
         super(props);
         this.Cells = [];
@@ -29,9 +85,9 @@ export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFl
         };
     }
     initCells(): void {
-        this.Cells.push({SliderValue: 1});
-        this.Cells.push({SliderValue: 1});
-        this.Cells.push({SliderValue: 1});
+        this.Cells.push({SliderValue: 1, animValue: new Animated.Value(1)});
+        this.Cells.push({SliderValue: 1, animValue: new Animated.Value(1)});
+        this.Cells.push({SliderValue: 1, animValue: new Animated.Value(1)});
     }
 
     turnDirection(SwitchIsOn: boolean): {} {
@@ -42,15 +98,28 @@ export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFl
 
     ChangeSliderValue(value: number): void {
        this.state.currentCell.SliderValue = value;
-       this.setState({currentCell: this.state.currentCell});
+
+
     }
 
     ChangeFlexGrow(cell: number): number {
         return this.Cells[cell].SliderValue;
     }
 
+
     inPickerOnChangeValue = (value: number): void => {this.setState({selected: value, currentCell: this.Cells[value]}); };
-    inSliderOnChangeValue = (value: number): void => { this.ChangeSliderValue(value); };
+    inSliderOnChangeValue = (value: number): void => {
+        this.ChangeSliderValue(value);
+        Animated.timing(       // Uses easing functions
+            this.state.currentCell.animValue, // The value to drive
+            {
+
+                toValue: this.state.currentCell.SliderValue,        // Target
+                duration: 2000,    // Configuration
+            },
+        ).start();
+       this.setState({currentCell: this.state.currentCell});
+    };
     inSwitchOnChangeValue = (value: boolean): void => {this.setState({SwitchIsOn: value}); };
     render(): JSX.Element {
         return (
@@ -74,9 +143,9 @@ export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFl
                         value = {this.state.SwitchIsOn}
                         />
                     <View style={this.turnDirection(this.state.SwitchIsOn)}>
-                        <View style={{flexGrow: this.ChangeFlexGrow(0), backgroundColor: 'red'}}/>
-                        <View style={{flexGrow: this.ChangeFlexGrow(1), backgroundColor: 'green'}}/>
-                        <View style={{flexGrow: this.ChangeFlexGrow(2), backgroundColor: 'blue'}}/>
+                        <Animated.View style={{flexGrow: this.Cells[0].animValue, opacity: this.Cells[0].animValue, backgroundColor: 'red'}}/>
+                        <Animated.View style={{flexGrow: this.Cells[1].animValue, opacity: this.Cells[1].animValue, backgroundColor: 'green'}}/>
+                        <Animated.View style={{flexGrow: this.Cells[2].animValue, opacity: this.Cells[2].animValue, backgroundColor: 'blue'}}/>
                     </View>
 
                 </View>
