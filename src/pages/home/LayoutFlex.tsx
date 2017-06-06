@@ -34,8 +34,8 @@ export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFl
         this.Pages.push({SliderValue: 5, SwitchIsOn: true});
     }
 
-    turnDirection(trueSwitchIsOn: boolean): {} {
-        if (trueSwitchIsOn) return {flexDirection: "row", height: 100};
+    turnDirection(SwitchIsOn: boolean): {} {
+        if (SwitchIsOn) return {flexDirection: "row", height: 100};
 
         return {flex: 1, flexDirection: "column", width: 100};
     }
@@ -52,19 +52,21 @@ export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFl
 
     ChangeFlexGrow(cell: number): number {
         if (cell == this.state.selected) {
-            return this.state.currentPage.SliderValue && +this.state.currentPage.SliderValue.toFixed(3);
+            return this.state.currentPage.SliderValue;
         }
 
         return 1;
     }
-
+    inPickerOnChangeValue = (value: number): void => {this.setState({selected: value, currentPage: this.Pages[value]}); };
+    inSliderOnChangeValue = (value: number): void => { this.ChangeSliderValue(value); };
+    inSwitchOnChangeValue = (value: boolean): void => {this.ChangeSwitcherValue(value); };
     render(): JSX.Element {
         return (
             <View style={{flexGrow: 1}}>
                 <View style={{flexDirection: "column", flexGrow: 1}}>
                     <Picker
                         selectedValue={this.state.selected}
-                        onValueChange={(value): void => {this.setState({selected: value, currentPage: this.Pages[value]})}}>
+                        onValueChange={this.inPickerOnChangeValue}>
                         <Picker.Item label="Cell 1" value="0"/>
                         <Picker.Item label="Cell 2" value="1"/>
                         <Picker.Item label="Cell 3" value="2"/>
@@ -75,9 +77,9 @@ export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFl
                         value = {this.state.currentPage.SliderValue}
                         minimumValue={1}
                         maximumValue={7}
-                        onValueChange={(value): void => {this.ChangeSliderValue(value)}}/>
+                        onValueChange={this.inSliderOnChangeValue}/>
                     <Switch
-                        onValueChange={(value): void => {this.ChangeSwitcherValue(value)}}
+                        onValueChange={this.inSwitchOnChangeValue}
                         value = {this.state.currentPage.SwitchIsOn}
                         />
                     <Text>{this.state.currentPage.SliderValue}</Text>
