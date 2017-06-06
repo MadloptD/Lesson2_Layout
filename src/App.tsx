@@ -1,5 +1,5 @@
 import {AppRegistry} from "react-native";
-import {HomePage} from "./pages/home/HomePage";
+import {LayoutFlex} from "./pages/home/LayoutFlex";
 //import React, {Component} from "react";
 
 // export class App extends Component<{}, {}> {
@@ -9,4 +9,4 @@ import {HomePage} from "./pages/home/HomePage";
 //         );
 //     }
 // }
-AppRegistry.registerComponent("Layout", () => HomePage);
+AppRegistry.registerComponent("Layout", () => LayoutFlex);

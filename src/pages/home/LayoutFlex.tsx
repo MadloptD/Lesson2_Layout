@@ -1,24 +1,10 @@
-import React, {Component} from "react";
-//import {Text, View, StyleSheet, ViewStyle} from "react-native";
-//import {FlexAlign} from "../../types/react-styles";
+import React from "react";
 import {View, Text, Slider, Switch, Picker} from "react-native";
 
-interface IProps {
-    text: string;
+interface IPropsLayoutFlex {
 }
 
-interface IState {
-    showText: boolean;
-}
-
-interface IPropsTranslate {
-
-}
-
-interface IPropsSlider {
-}
-
-interface IStateSlider {
+interface IStateLayoutFlex {
     selected: number;
     currentPage: Page;
 }
@@ -30,9 +16,9 @@ interface IPage {
 
 type Page = IPage;
 
-export class LayoutFlex extends React.Component<IPropsSlider, IStateSlider> {
+export class LayoutFlex extends React.Component<IPropsLayoutFlex, IStateLayoutFlex> {
     Pages: Page[];
-    constructor(props: IPropsTranslate) {
+    constructor(props: IPropsLayoutFlex) {
         super(props);
         this.Pages = [];
         this.initPages();
@@ -74,11 +60,11 @@ export class LayoutFlex extends React.Component<IPropsSlider, IStateSlider> {
 
     render(): JSX.Element {
         return (
-            <View style={{flexGrow: 1, backgroundColor: "grey"}}>
+            <View style={{flexGrow: 1}}>
                 <View style={{flexDirection: "column", flexGrow: 1}}>
                     <Picker
                         selectedValue={this.state.selected}
-                        onValueChange={(value) => {this.setState({selected: value, currentPage: this.Pages[value]})}}>
+                        onValueChange={(value): void => {this.setState({selected: value, currentPage: this.Pages[value]})}}>
                         <Picker.Item label="Cell 1" value="0"/>
                         <Picker.Item label="Cell 2" value="1"/>
                         <Picker.Item label="Cell 3" value="2"/>
@@ -89,9 +75,9 @@ export class LayoutFlex extends React.Component<IPropsSlider, IStateSlider> {
                         value = {this.state.currentPage.SliderValue}
                         minimumValue={1}
                         maximumValue={7}
-                        onValueChange={(value) => {this.ChangeSliderValue(value)}}/>
+                        onValueChange={(value): void => {this.ChangeSliderValue(value)}}/>
                     <Switch
-                        onValueChange={(value) => {this.ChangeSwitcherValue(value)}}
+                        onValueChange={(value): void => {this.ChangeSwitcherValue(value)}}
                         value = {this.state.currentPage.SwitchIsOn}
                         />
                     <Text>{this.state.currentPage.SliderValue}</Text>
@@ -108,7 +94,3 @@ export class LayoutFlex extends React.Component<IPropsSlider, IStateSlider> {
         );
     }
 }
-
-
-
-
